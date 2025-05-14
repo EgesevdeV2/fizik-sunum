@@ -164,17 +164,48 @@
 </head>
 <body>
 
-    <header>
-        <h1>Türk Dili ve Edebiyatı Performans ve Konuşma Ödevi</h1>
-        <h2>Ege Özçelik 8/B - 229</h2>
-    </header>
-    <div class="container">
+<header>
+    <h1>Türk Dili ve Edebiyatı Performans ve Konuşma Ödevi</h1>
+    <h2>Ege Özçelik 8/B - 229</h2>
+</header>
+    
+<div class="container">
+    
     <div class="slide active">
   <img src="Fizik.jpeg" alt="Fizik">
   <h1>Fizik Sunum Dosyasını İndir</h1>
   <a href="fizikodev229.pdf" class="download-button" download>İndir</a>
     <h2> </h2>
     </div>
-  </div>
+</div>
+    <!-- Gezinti Butonları -->
+    <div class="nav-buttons">
+    <button class="arrow-left" onclick="prevSlide()">Geri</button>
+    <button class="arrow-right" onclick="nextSlide()">İleri</button>
+</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.classList.remove('active');
+            if (i === index) {
+                slide.classList.add('active');
+            }
+        });
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(currentSlide);
+    }
+</script>
 </body>
 </html>
