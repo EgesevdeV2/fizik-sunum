@@ -13,7 +13,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
+        }   
+        @media print {
+            .nav-buttons {
+            display: none !important;
+            }
+        }    
+
         header {
             background-color: #333333;
             color: white;
