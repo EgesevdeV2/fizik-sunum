@@ -260,35 +260,44 @@ updatePageIndicator();
 function downloadPDF() {
     const slides = document.querySelectorAll('.slide');
     const navButtons = document.querySelector('.nav-buttons');
+    const pageIndicator = document.getElementById("page-indicator");
 
-    // Slaytları görünür yap
+    // Tüm slaytları geçici olarak görünür yap
     slides.forEach(slide => {
         slide.style.display = 'block';
         slide.classList.add('active');
     });
 
-    // Navigasyon butonlarını gizle
+    // Navigasyon butonlarını ve göstergeyi gizle
     if (navButtons) navButtons.style.display = 'none';
+    if (pageIndicator) pageIndicator.style.display = 'none';
 
+    // PDF oluşturulacak içerik
     const element = document.querySelector('.container');
 
     const opt = {
-        margin: 0,
-        filename: 'sunum.pdf',
-        image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 4 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        margin:       0,
+        filename:     'sunum.pdf',
+        image:        { type: 'jpeg', quality: 1 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
     html2pdf().set(opt).from(element).save().then(() => {
-        // Slaytları geri eski haline döndür
+        // Slaytları eski haline döndür
         slides.forEach((slide, index) => {
-            slide.style.display = (index === 0) ? 'block' : 'none';
-            slide.classList.toggle('active', index === 0);
+            if (index === 0) {
+                slide.classList.add('active');
+                slide.style.display = 'block';
+            } else {
+                slide.classList.remove('active');
+                slide.style.display = 'none';
+            }
         });
 
         // Butonları geri göster
         if (navButtons) navButtons.style.display = 'flex';
+        if (pageIndicator) pageIndicator.style.display = 'block';
     });
 }
 </script>
