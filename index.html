@@ -30,8 +30,8 @@
             margin-top: 10px;
         }
         .container {
-            width: 90%;
-            max-width: 800px;
+            width: 100%;
+            max-width: 1000px;
             background: white;
             border-radius: 10px;
             padding: 25px;
@@ -184,9 +184,14 @@
   <img src="" alt="Edebiyat">
   <h2>Dilimiz</h2>
   <p> Edebiyat </p>
-
-    
     </div>
+
+    <div class="slide">
+  <img src="" alt="Edebiyat">
+  <h2>Dilimiz</h2>
+  <p> Edebiyat </p>
+    </div>
+    
 </div>
     <!-- Gezinti Butonları -->
     <div class="nav-buttons">
@@ -235,8 +240,19 @@ function showSlide(index) {
 // Sayfa ilk açıldığında göster
 updatePageIndicator();
 
-    function downloadPDF() {
-    const element = document.body; // tüm sayfayı indir
+function downloadPDF() {
+    // Butonları ve sayfa göstergesini gizle
+    const navButtons = document.querySelector('.nav-buttons');
+    const pageIndicator = document.getElementById('page-indicator');
+    navButtons.style.display = 'none';
+    if (pageIndicator) pageIndicator.style.display = 'none';
+
+    // Tüm slaytları görünür yap
+    const allSlides = document.querySelectorAll('.slide');
+    allSlides.forEach(slide => slide.style.display = 'block');
+
+    // PDF olarak kaydet
+    const element = document.querySelector('.container');
     html2pdf()
         .from(element)
         .set({
@@ -246,8 +262,60 @@ updatePageIndicator();
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
         })
-        .save();
+        .save()
+        .then(() => {
+            // Slaytları eski haline getir
+            allSlides.forEach((slide, i) => {
+                if (i === currentSlide) {
+                    slide.style.display = 'block';
+                } else {
+                    slide.style.display = 'none';
+                }
+            });
+
+            // Butonları geri getir
+            navButtons.style.display = 'flex';
+            if (pageIndicator) pageIndicator.style.display = 'block';
+        });
 }
+    
+document.addEventListener('DOMContentLoaded', function () {
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.classList.remove('active');
+            if (i === index) {
+                slide.classList.add('active');
+            }
+        });
+        updatePageIndicator();
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    function updatePageIndicator() {
+        const indicator = document.getElementById("page-indicator");
+        if (indicator) {
+            indicator.textContent = `Sayfa ${currentSlide + 1} / ${slides.length}`;
+        }
+    }
+
+    window.nextSlide = nextSlide;
+    window.prevSlide = prevSlide;
+
+    // Başlangıçta ilk slaytı göster
+    showSlide(currentSlide);
+});
 </script>
 </body>
 </html>
