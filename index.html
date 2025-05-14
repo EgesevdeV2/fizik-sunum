@@ -290,44 +290,6 @@ function downloadPDF() {
         document.querySelector('.nav-buttons').style.display = 'flex';
     });
 }
-    
-document.addEventListener('DOMContentLoaded', function () {
-    const slides = document.querySelectorAll('.slide');
-    let currentSlide = 0;
-
-    function showSlide(index) {
-        slides.forEach((slide, i) => {
-            slide.classList.remove('active');
-            if (i === index) {
-                slide.classList.add('active');
-            }
-        });
-        updatePageIndicator();
-    }
-
-    function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-    }
-
-    function prevSlide() {
-        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-        showSlide(currentSlide);
-    }
-
-    function updatePageIndicator() {
-        const indicator = document.getElementById("page-indicator");
-        if (indicator) {
-            indicator.textContent = `Sayfa ${currentSlide + 1} / ${slides.length}`;
-        }
-    }
-
-    window.nextSlide = nextSlide;
-    window.prevSlide = prevSlide;
-
-    // Başlangıçta ilk slaytı göster
-    showSlide(currentSlide);
-});
 </script>
 </body>
 </html>
