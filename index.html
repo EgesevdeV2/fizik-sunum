@@ -45,6 +45,7 @@
             padding: 25px;
             margin: 20px 0;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            padding-bottom: 120px;
         }
         .nav-buttons {
             position: fixed;
@@ -259,40 +260,37 @@ function showSlide(index) {
 updatePageIndicator();
 
 function downloadPDF() {
-    // Tüm slaytları görünür yap
     const slides = document.querySelectorAll('.slide');
+    const navButtons = document.querySelector('.nav-buttons');
+
+    // Slaytları görünür yap
     slides.forEach(slide => {
-        slide.classList.add('active');
         slide.style.display = 'block';
+        slide.classList.add('active');
     });
 
-    // Butonları geçici olarak gizle
-    document.querySelector('.nav-buttons').style.display = 'none';
+    // Navigasyon butonlarını gizle
+    if (navButtons) navButtons.style.display = 'none';
 
-    // PDF oluşturma
     const element = document.querySelector('.container');
 
     const opt = {
-        margin:       0, // Kenar boşluğu yok
-        filename:     'sunum.pdf',
-        image:        { type: 'jpeg', quality: 1 },
-        html2canvas:  { scale: 4 }, // Yüksek çözünürlük için
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        margin: 0,
+        filename: 'sunum.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 4 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
     html2pdf().set(opt).from(element).save().then(() => {
-        // Slaytları eski haline döndür
+        // Slaytları geri eski haline döndür
         slides.forEach((slide, index) => {
-            if (index === 0) {
-                slide.classList.add('active');
-            } else {
-                slide.classList.remove('active');
-                slide.style.display = 'none';
-            }
+            slide.style.display = (index === 0) ? 'block' : 'none';
+            slide.classList.toggle('active', index === 0);
         });
 
         // Butonları geri göster
-        document.querySelector('.nav-buttons').style.display = 'flex';
+        if (navButtons) navButtons.style.display = 'flex';
     });
 }
 </script>
