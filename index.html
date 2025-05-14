@@ -161,6 +161,7 @@
       background-color: #45a049;
     }
   </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
@@ -170,11 +171,12 @@
 </header>
     
 <div class="container">
+    <div id="page-indicator" style="font-size: 20px; margin-bottom: 20px; color: #333;"></div>
     
     <div class="slide active">
   <img src="Fizik.jpeg" alt="Fizik">
   <h1>Fizik Sunum Dosyasını İndir</h1>
-  <a href="fizikodev229.pdf" class="download-button" download>İndir</a>
+  <button onclick="downloadPDF()" class="download-button">PDF Olarak İndir</button>
     <h2> </h2>
     </div>
 
@@ -214,6 +216,38 @@
         currentSlide = (currentSlide - 1 + slides.length) % slides.length;
         showSlide(currentSlide);
     }
+
+    function updatePageIndicator() {
+    const indicator = document.getElementById("page-indicator");
+    indicator.textContent = `Sayfa ${currentSlide + 1} / ${slides.length}`;
+}
+
+function showSlide(index) {
+    slides.forEach((slide, i) => {
+        slide.classList.remove('active');
+        if (i === index) {
+            slide.classList.add('active');
+        }
+    });
+    updatePageIndicator(); // her geçişte güncelle
+}
+
+// Sayfa ilk açıldığında göster
+updatePageIndicator();
+
+    function downloadPDF() {
+    const element = document.body; // tüm sayfayı indir
+    html2pdf()
+        .from(element)
+        .set({
+            margin: 0.5,
+            filename: 'edebiyat_odevi.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        })
+        .save();
+}
 </script>
 </body>
 </html>
